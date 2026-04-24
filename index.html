@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trollpicks</title>
+  <title>Trollpick Universe</title>
 
   <style>
     body {
@@ -15,7 +15,6 @@
     h1 {
       text-align: center;
       margin-bottom: 40px;
-      font-size: 2.5em;
     }
 
     .grid {
@@ -43,11 +42,42 @@
     .title {
       margin-top: 12px;
       font-weight: bold;
-      font-size: 1.1em;
     }
 
-    audio {
+    /* PLAYER */
+
+    .player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #181818;
+      padding: 15px;
       display: none;
+      flex-direction: column;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      background: none;
+      border: 1px solid white;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    .time {
+      font-size: 0.9em;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -58,41 +88,80 @@
 
 <div class="grid">
 
-  <!-- Ajaxvlad -->
-  <div class="card" onclick="playMusic('audio1')">
+  <div class="card" onclick="playMusic('Ajaxvlad.mp3')">
     <img src="Ajaxvlad.png">
     <div class="title">Ajaxvlad</div>
-    <audio id="audio1" src="Ajaxvlad.mp3"></audio>
   </div>
 
-  <!-- Mozzarellia -->
-  <div class="card" onclick="playMusic('audio2')">
+  <div class="card" onclick="playMusic('Mozzarrellia.mp3')">
     <img src="Mozzarellia.png">
     <div class="title">Mozzarellia</div>
-    <audio id="audio2" src="Mozzarellia.mp3"></audio>
   </div>
 
-  <!-- Yasugrosyonegro -->
-  <div class="card" onclick="playMusic('audio3')">
+  <div class="card" onclick="playMusic('Yasugrosyonegro.mp3')">
     <img src="Yasugrosyonegro.png">
     <div class="title">Yasugrosyonegro</div>
-    <audio id="audio3" src="Yasugrosyonegro.mp3"></audio>
   </div>
 
 </div>
 
+<!-- PLAYER -->
+<div class="player" id="player">
+  <div class="controls">
+    <button onclick="togglePlay()">⏯</button>
+    <input type="range" id="progress" value="0">
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+  </div>
+  <div class="time" id="time">0:00 / 0:00</div>
+</div>
+
+<audio id="audio"></audio>
+
 <script>
-  function playMusic(id) {
-    let audio = document.getElementById(id);
+  let audio = document.getElementById("audio");
+  let player = document.getElementById("player");
+  let progress = document.getElementById("progress");
+  let volume = document.getElementById("volume");
+  let timeDisplay = document.getElementById("time");
 
-    // stop toutes les musiques
-    document.querySelectorAll("audio").forEach(a => {
-      a.pause();
-      a.currentTime = 0;
-    });
-
-    // joue celle cliquée
+  function playMusic(src) {
+    audio.src = src;
     audio.play();
+    player.style.display = "flex";
+  }
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }
+
+  // progression
+  audio.addEventListener("timeupdate", () => {
+    progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+
+    let current = formatTime(audio.currentTime);
+    let duration = formatTime(audio.duration);
+    timeDisplay.textContent = current + " / " + duration;
+  });
+
+  progress.addEventListener("input", () => {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  });
+
+  // volume
+  volume.addEventListener("input", () => {
+    audio.volume = volume.value;
+  });
+
+  function formatTime(time) {
+    if (isNaN(time)) return "0:00";
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
+    if (seconds < 10) seconds = "0" + seconds;
+    return minutes + ":" + seconds;
   }
 </script>
 
