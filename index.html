@@ -122,7 +122,6 @@
       justify-content:space-between;
     }
 
-    /* TITRE */
     .modal-title {
       font-size:36px;
       font-weight:bold;
@@ -130,7 +129,6 @@
       margin-bottom:10px;
     }
 
-    /* DESCRIPTION */
     .info {
       flex:1;
       display:flex;
@@ -250,24 +248,16 @@ const trollpicks = [
 const grid = document.getElementById("grid");
 const audio = document.getElementById("audio");
 
-// 🔊 volume 10%
 audio.volume = 0.1;
 
-function render(){
-
-  const firstPos = Array.from(grid.children).map(el => el.getBoundingClientRect());
-
-  let data = [...trollpicks];
-  if(mode==="note") data.sort((a,b)=>b.note-a.note);
-
-  grid.innerHTML="";
-
+// INIT cards une seule fois
+function init(){
   const sorted = [...trollpicks].sort((a,b)=>b.note-a.note);
   const top1 = sorted[0].note;
   const top2 = sorted.find(x=>x.note<top1)?.note;
   const top3 = sorted.find(x=>x.note<top2)?.note;
 
-  data.forEach(t=>{
+  trollpicks.forEach(t=>{
     let border="transparent";
     if(t.note===top1) border="gold";
     else if(t.note===top2) border="silver";
@@ -277,6 +267,7 @@ function render(){
 
     const card=document.createElement("div");
     card.className="card";
+    card.dataset.name = t.name;
     card.style.borderColor=border;
 
     card.innerHTML=`
@@ -292,17 +283,34 @@ function render(){
 
     grid.appendChild(card);
   });
+}
 
-  const lastPos = Array.from(grid.children).map(el => el.getBoundingClientRect());
+function render(){
 
-  grid.children.forEach((el,i)=>{
-    const dx = firstPos[i]?.left - lastPos[i].left || 0;
-    const dy = firstPos[i]?.top - lastPos[i].top || 0;
+  let data = [...trollpicks];
+  if(mode==="note") data.sort((a,b)=>b.note-a.note);
+
+  const cards = Array.from(grid.children);
+
+  const positions = new Map();
+  cards.forEach(el => positions.set(el, el.getBoundingClientRect()));
+
+  data.forEach(t => {
+    const card = cards.find(c => c.dataset.name === t.name);
+    grid.appendChild(card);
+  });
+
+  cards.forEach(el => {
+    const oldPos = positions.get(el);
+    const newPos = el.getBoundingClientRect();
+
+    const dx = oldPos.left - newPos.left;
+    const dy = oldPos.top - newPos.top;
 
     el.style.transform = `translate(${dx}px, ${dy}px)`;
 
-    requestAnimationFrame(()=>{
-      el.style.transition = "transform 0.5s";
+    requestAnimationFrame(() => {
+      el.style.transition = "transform 0.5s ease";
       el.style.transform = "";
     });
   });
@@ -362,7 +370,7 @@ document.getElementById("modal").onclick = (e)=>{
   }
 };
 
-render();
+init();
 
 </script>
 
