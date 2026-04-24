@@ -98,7 +98,6 @@
     .modal-content {
       background:white;
       width:75%;
-      height:auto;
       max-height:90%;
       border-radius:12px;
       display:flex;
@@ -123,22 +122,26 @@
       justify-content:space-between;
     }
 
-    .info {
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      flex:1;
-    }
-
+    /* TITRE */
     .modal-title {
       font-size:36px;
       font-weight:bold;
-      margin-bottom:20px;
+      text-align:center;
+      margin-bottom:10px;
+    }
+
+    /* DESCRIPTION */
+    .info {
+      flex:1;
+      display:flex;
+      align-items:center;
     }
 
     .desc {
-      color:#333;
       font-size:18px;
+      color:#333;
+      text-align:left;
+      width:100%;
     }
 
     /* PLAYER */
@@ -204,8 +207,9 @@
 
     <div class="right">
 
+      <div class="modal-title" id="modalTitle"></div>
+
       <div class="info">
-        <div class="modal-title" id="modalTitle"></div>
         <div class="desc" id="modalDesc"></div>
       </div>
 
@@ -246,8 +250,8 @@ const trollpicks = [
 const grid = document.getElementById("grid");
 const audio = document.getElementById("audio");
 
-// volume 30%
-audio.volume = 0.3;
+// 🔊 volume 10%
+audio.volume = 0.1;
 
 function render(){
 
@@ -289,7 +293,6 @@ function render(){
     grid.appendChild(card);
   });
 
-  // FLIP animation
   const lastPos = Array.from(grid.children).map(el => el.getBoundingClientRect());
 
   grid.children.forEach((el,i)=>{
