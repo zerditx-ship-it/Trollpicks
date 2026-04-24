@@ -14,9 +14,9 @@
     .header {
       background: #0b1f3a;
       color: white;
-      padding: 20px;
+      padding: 25px;
       text-align: center;
-      font-size: 48px;
+      font-size: 40px;
       font-weight: bold;
     }
 
@@ -35,7 +35,9 @@
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.2s;
-      border: 8px solid transparent;
+      border: 6px solid transparent; /* PLUS LARGE */
+      display: flex;
+      flex-direction: column;
     }
 
     .card:hover {
@@ -44,30 +46,38 @@
 
     .card img {
       width: 100%;
-      display: block;
+      aspect-ratio: 2/3; /* FORCE MEME FORMAT */
+      object-fit: cover;
+    }
+
+    .content {
+      padding: 10px;
+      text-align: center;
+      min-height: 80px; /* FORCE MEME HAUTEUR */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .title {
-      padding: 10px;
       font-weight: bold;
-      text-align: center;
     }
 
     .note {
-      text-align: center;
-      padding-bottom: 10px;
       color: #444;
+      margin-top: 5px;
     }
 
     .index {
       position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(0,0,0,0.7);
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.9);
       color: white;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
     }
 
     /* PLAYER */
@@ -78,39 +88,39 @@
       width: 100%;
       background: #111;
       color: white;
-      padding: 15px;
+      padding: 10px 15px; /* MOINS HAUT */
       display: none;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .song-title {
       font-weight: bold;
       text-align: center;
-    }
-
-    .progress {
-      width: 100%;
+      font-size: 18px; /* PLUS GROS */
     }
 
     .controls {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
-    /* VOLUME vertical */
+    .progress {
+      flex: 1;
+    }
+
+    /* volume à droite */
     .volume-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
     }
 
     input[type="range"].vertical {
       writing-mode: bt-lr;
       -webkit-appearance: slider-vertical;
-      height: 80px;
+      height: 60px;
     }
   </style>
 </head>
@@ -125,13 +135,11 @@
 <div class="player" id="player">
   <div class="song-title" id="songTitle">---</div>
 
-  <input type="range" id="progress" class="progress" value="0">
-
   <div class="controls">
     <button onclick="togglePlay()">⏯</button>
+    <input type="range" id="progress" class="progress" value="0">
 
     <div class="volume-container">
-      🔊
       <input type="range" id="volume" class="vertical" min="0" max="1" step="0.01" value="1">
     </div>
   </div>
@@ -154,32 +162,31 @@ const progress = document.getElementById("progress");
 const volume = document.getElementById("volume");
 const songTitle = document.getElementById("songTitle");
 
-let currentAudio = "";
-
-// TRI POUR BADGES
+// classement
 const sorted = [...trollpicks].sort((a,b)=>b.note-a.note);
 const top1 = sorted[0].note;
 const top2 = sorted.find(x => x.note < top1)?.note;
 const top3 = sorted.find(x => x.note < top2)?.note;
 
-// GENERATION
 trollpicks.forEach((t, i) => {
 
   let border = "transparent";
 
   if (t.note === top1) border = "gold";
   else if (t.note === top2) border = "silver";
-  else if (t.note === top3) border = "#cd7f32"; // bronze
+  else if (t.note === top3) border = "#cd7f32";
 
   const card = document.createElement("div");
   card.className = "card";
   card.style.borderColor = border;
 
   card.innerHTML = `
-    <div class="index">${i+1}</div>
+    <div class="index">#${i+1}</div>
     <img src="${t.name}.png">
-    <div class="title">${t.name}</div>
-    <div class="note">⭐ ${t.note}/10</div>
+    <div class="content">
+      <div class="title">${t.name}</div>
+      <div class="note">⭐ ${t.note}/10</div>
+    </div>
   `;
 
   card.onclick = () => playMusic(t.name);
@@ -187,12 +194,9 @@ trollpicks.forEach((t, i) => {
   grid.appendChild(card);
 });
 
-// PLAYER
 function playMusic(name) {
-  currentAudio = name + ".mp3";
-  audio.src = currentAudio;
+  audio.src = name + ".mp3";
   audio.play();
-
   songTitle.textContent = name;
   player.style.display = "flex";
 }
@@ -202,7 +206,6 @@ function togglePlay() {
   else audio.pause();
 }
 
-// PROGRESS
 audio.addEventListener("timeupdate", () => {
   progress.value = (audio.currentTime / audio.duration) * 100 || 0;
 });
@@ -211,7 +214,6 @@ progress.addEventListener("input", () => {
   audio.currentTime = (progress.value / 100) * audio.duration;
 });
 
-// VOLUME
 volume.addEventListener("input", () => {
   audio.volume = volume.value;
 });
