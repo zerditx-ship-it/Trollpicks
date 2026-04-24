@@ -1,20 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trollpick Masterclass</title>
+  <title>Trollpick Universe</title>
+
+  <style>
+    body {
+      background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
+      color: white;
+      font-family: Arial;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .title {
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>🔥 Nos Trollpicks 🔥</h1>
+<h1>🎬 Trollpick Universe 🎬</h1>
 
-<h2>Yuumi Jungle</h2>
-<img src="Mozzarellia.png" width="300">
+<div class="grid">
 
-<audio controls>
-  <source src="Mozzarellia.mp3" type="audio/mpeg">
-</audio>
+  <!-- Ajaxvlad -->
+  <div class="card" onclick="playMusic('audio1')">
+    <img src="Ajaxvlad.png">
+    <div class="title">Ajaxvlad</div>
+    <audio id="audio1" src="Ajaxvlad.mp3"></audio>
+  </div>
 
-<p>0 logique mais 100% winrate</p>
+  <!-- Mozzarellia -->
+  <div class="card" onclick="playMusic('audio2')">
+    <img src="Mozzarellia.png">
+    <div class="title">Mozzarellia</div>
+    <audio id="audio2" src="Mozzarellia.mp3"></audio>
+  </div>
+
+  <!-- Yasugrosyonegro -->
+  <div class="card" onclick="playMusic('audio3')">
+    <img src="Yasugrosyonegro.png">
+    <div class="title">Yasugrosyonegro</div>
+    <audio id="audio3" src="Yasugrosyonegro.mp3"></audio>
+  </div>
+
+</div>
+
+<script>
+  function playMusic(id) {
+    let audio = document.getElementById(id);
+
+    // stop toutes les musiques
+    document.querySelectorAll("audio").forEach(a => {
+      a.pause();
+      a.currentTime = 0;
+    });
+
+    // joue celle cliquée
+    audio.play();
+  }
+</script>
 
 </body>
 </html>
