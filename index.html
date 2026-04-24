@@ -46,7 +46,6 @@
       transition: transform 0.3s;
     }
 
-    /* HOVER FIX */
     .card:hover {
       transform: scale(1.08);
     }
@@ -65,6 +64,11 @@
     .title {
       font-size: 20px;
       font-weight: bold;
+    }
+
+    .note {
+      margin-top: 5px;
+      color: #555;
     }
 
     .index {
@@ -94,7 +98,8 @@
     .modal-content {
       background:white;
       width:75%;
-      height:70%;
+      height:auto;
+      max-height:90%;
       border-radius:12px;
       display:flex;
       overflow:hidden;
@@ -112,14 +117,28 @@
 
     .right {
       width:60%;
-      padding:20px;
+      padding:25px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
     }
 
+    .info {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      flex:1;
+    }
+
+    .modal-title {
+      font-size:36px;
+      font-weight:bold;
+      margin-bottom:20px;
+    }
+
     .desc {
-      margin-top:10px;
+      color:#333;
+      font-size:18px;
     }
 
     /* PLAYER */
@@ -131,7 +150,7 @@
     }
 
     .player-title {
-      font-size:24px;
+      font-size:22px;
       margin-bottom:10px;
     }
 
@@ -184,8 +203,9 @@
     </div>
 
     <div class="right">
-      <div>
-        <h2 id="modalTitle"></h2>
+
+      <div class="info">
+        <div class="modal-title" id="modalTitle"></div>
         <div class="desc" id="modalDesc"></div>
       </div>
 
@@ -201,7 +221,7 @@
 
           <div class="time" id="duration">0:00</div>
 
-          <input type="range" id="volume" class="volume" min="0" max="1" step="0.01" value="1">
+          <input type="range" id="volume" class="volume" min="0" max="1" step="0.01">
         </div>
       </div>
 
@@ -213,6 +233,7 @@
 <audio id="audio"></audio>
 
 <script>
+
 let mode = "index";
 
 const trollpicks = [
@@ -225,13 +246,15 @@ const trollpicks = [
 const grid = document.getElementById("grid");
 const audio = document.getElementById("audio");
 
+// volume 30%
+audio.volume = 0.3;
+
 function render(){
 
-  let data = [...trollpicks];
+  const firstPos = Array.from(grid.children).map(el => el.getBoundingClientRect());
 
-  if(mode==="note"){
-    data.sort((a,b)=>b.note-a.note);
-  }
+  let data = [...trollpicks];
+  if(mode==="note") data.sort((a,b)=>b.note-a.note);
 
   grid.innerHTML="";
 
@@ -257,6 +280,7 @@ function render(){
       <img src="${t.name}.png">
       <div class="content">
         <div class="title">${t.name}</div>
+        <div class="note">⭐ ${t.note}/10</div>
       </div>
     `;
 
@@ -264,13 +288,25 @@ function render(){
 
     grid.appendChild(card);
   });
+
+  // FLIP animation
+  const lastPos = Array.from(grid.children).map(el => el.getBoundingClientRect());
+
+  grid.children.forEach((el,i)=>{
+    const dx = firstPos[i]?.left - lastPos[i].left || 0;
+    const dy = firstPos[i]?.top - lastPos[i].top || 0;
+
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+
+    requestAnimationFrame(()=>{
+      el.style.transition = "transform 0.5s";
+      el.style.transform = "";
+    });
+  });
 }
 
 function sortBy(type){
   mode = type;
-
-  // animation simple
-  grid.style.transition="all 0.4s";
   render();
 }
 
@@ -293,7 +329,6 @@ function togglePlay(){
 const progress = document.getElementById("progress");
 const currentTime = document.getElementById("currentTime");
 const duration = document.getElementById("duration");
-const volume = document.getElementById("volume");
 
 audio.addEventListener("timeupdate", ()=>{
   progress.value = (audio.currentTime/audio.duration)*100 || 0;
@@ -305,8 +340,8 @@ progress.addEventListener("input", ()=>{
   audio.currentTime = (progress.value/100)*audio.duration;
 });
 
-volume.addEventListener("input", ()=>{
-  audio.volume = volume.value;
+document.getElementById("volume").addEventListener("input", (e)=>{
+  audio.volume = e.target.value;
 });
 
 function format(t){
@@ -325,6 +360,7 @@ document.getElementById("modal").onclick = (e)=>{
 };
 
 render();
+
 </script>
 
 </body>
