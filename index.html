@@ -14,10 +14,23 @@
     .header {
       background: #0b1f3a;
       color: white;
-      padding: 25px;
+      padding: 35px;
       text-align: center;
-      font-size: 40px;
+      font-size: 60px; /* PLUS GROS */
       font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    /* TRI BUTTON */
+    .controls-bar {
+      text-align: center;
+      margin: 15px;
+    }
+
+    button.sort-btn {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
     }
 
     /* GRID */
@@ -34,37 +47,28 @@
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s;
-      border: 6px solid transparent; /* PLUS LARGE */
+      border: 8px solid transparent; /* PLUS EPAIS */
       display: flex;
       flex-direction: column;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
     }
 
     .card img {
       width: 100%;
-      aspect-ratio: 2/3; /* FORCE MEME FORMAT */
+      aspect-ratio: 2/3;
       object-fit: cover;
     }
 
     .content {
-      padding: 10px;
+      padding: 12px;
       text-align: center;
-      min-height: 80px; /* FORCE MEME HAUTEUR */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     .title {
+      font-size: 20px; /* PLUS GROS */
       font-weight: bold;
     }
 
     .note {
-      color: #444;
       margin-top: 5px;
     }
 
@@ -74,149 +78,233 @@
       left: 10px;
       background: rgba(0,0,0,0.9);
       color: white;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 16px;
+      padding: 10px;
+      font-size: 18px;
       font-weight: bold;
+      border-radius: 8px;
+    }
+
+    /* POPUP */
+    .modal {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.8);
+      display:none;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .modal-content {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      width:500px;
+      max-width:90%;
+      text-align:center;
+    }
+
+    .modal img {
+      width:100%;
+      border-radius:10px;
+    }
+
+    .desc {
+      margin:10px 0;
+      color:#333;
     }
 
     /* PLAYER */
     .player {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #111;
-      color: white;
-      padding: 10px 15px; /* MOINS HAUT */
-      display: none;
-      flex-direction: column;
-      gap: 6px;
+      background:#111;
+      color:white;
+      padding:15px;
+      margin-top:10px;
+      border-radius:10px;
     }
 
-    .song-title {
-      font-weight: bold;
-      text-align: center;
-      font-size: 18px; /* PLUS GROS */
+    .player-top {
+      font-size:22px;
+      margin-bottom:10px;
     }
 
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .player-controls {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .big-btn {
+      font-size:22px;
+      padding:10px;
+      cursor:pointer;
     }
 
     .progress {
-      flex: 1;
+      flex:1;
     }
 
-    /* volume à droite */
-    .volume-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .time {
+      font-size:14px;
+      width:60px;
+      text-align:center;
     }
 
-    input[type="range"].vertical {
-      writing-mode: bt-lr;
-      -webkit-appearance: slider-vertical;
-      height: 60px;
-    }
   </style>
 </head>
 
 <body>
 
-<div class="header">Trollpicks</div>
+<div class="header">TROLLPICKS</div>
+
+<div class="controls-bar">
+  <button class="sort-btn" onclick="sortBy('note')">Trier par note</button>
+  <button class="sort-btn" onclick="sortBy('index')">Ordre original</button>
+</div>
 
 <div class="grid" id="grid"></div>
 
-<!-- PLAYER -->
-<div class="player" id="player">
-  <div class="song-title" id="songTitle">---</div>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <img id="modalImg">
+    <h2 id="modalTitle"></h2>
+    <div class="desc" id="modalDesc"></div>
 
-  <div class="controls">
-    <button onclick="togglePlay()">⏯</button>
-    <input type="range" id="progress" class="progress" value="0">
+    <div class="player">
+      <div class="player-top" id="playerTitle"></div>
 
-    <div class="volume-container">
-      <input type="range" id="volume" class="vertical" min="0" max="1" step="0.01" value="1">
+      <div class="player-controls">
+        <button class="big-btn" onclick="togglePlay()">⏯</button>
+
+        <div class="time" id="currentTime">0:00</div>
+
+        <input type="range" id="progress" class="progress" value="0">
+
+        <div class="time" id="duration">0:00</div>
+      </div>
     </div>
+
   </div>
 </div>
 
 <audio id="audio"></audio>
 
 <script>
+
+let mode = "index";
+
 const trollpicks = [
-  { name: "Ajaxvlad", note: 8 },
-  { name: "Mozzarellia", note: 9 },
-  { name: "Yasugrosyonegro", note: 7 },
-  { name: "Jeanluxmelanchon", note: 8 }
+  { name:"Ajaxvlad", note:8, desc:"Description Ajax" },
+  { name:"Mozzarellia", note:9, desc:"Description Mozza" },
+  { name:"Yasugrosyonegro", note:7, desc:"Description Yasu" },
+  { name:"Jeanluxmelanchon", note:8, desc:"Description Jeanlux" }
 ];
 
-const grid = document.getElementById("grid");
 const audio = document.getElementById("audio");
-const player = document.getElementById("player");
-const progress = document.getElementById("progress");
-const volume = document.getElementById("volume");
-const songTitle = document.getElementById("songTitle");
 
-// classement
-const sorted = [...trollpicks].sort((a,b)=>b.note-a.note);
-const top1 = sorted[0].note;
-const top2 = sorted.find(x => x.note < top1)?.note;
-const top3 = sorted.find(x => x.note < top2)?.note;
+function render(){
 
-trollpicks.forEach((t, i) => {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
-  let border = "transparent";
+  let data = [...trollpicks];
 
-  if (t.note === top1) border = "gold";
-  else if (t.note === top2) border = "silver";
-  else if (t.note === top3) border = "#cd7f32";
+  if(mode==="note"){
+    data.sort((a,b)=>b.note-a.note);
+  }
 
-  const card = document.createElement("div");
-  card.className = "card";
-  card.style.borderColor = border;
+  const sorted = [...trollpicks].sort((a,b)=>b.note-a.note);
+  const top1 = sorted[0].note;
+  const top2 = sorted.find(x=>x.note<top1)?.note;
+  const top3 = sorted.find(x=>x.note<top2)?.note;
 
-  card.innerHTML = `
-    <div class="index">#${i+1}</div>
-    <img src="${t.name}.png">
-    <div class="content">
-      <div class="title">${t.name}</div>
-      <div class="note">⭐ ${t.note}/10</div>
-    </div>
-  `;
+  data.forEach((t,i)=>{
 
-  card.onclick = () => playMusic(t.name);
+    let border="transparent";
+    if(t.note===top1) border="gold";
+    else if(t.note===top2) border="silver";
+    else if(t.note===top3) border="#cd7f32";
 
-  grid.appendChild(card);
-});
+    const indexOriginal = trollpicks.indexOf(t)+1;
 
-function playMusic(name) {
-  audio.src = name + ".mp3";
-  audio.play();
-  songTitle.textContent = name;
-  player.style.display = "flex";
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.borderColor=border;
+
+    card.innerHTML=`
+      <div class="index">#${indexOriginal}</div>
+      <img src="${t.name}.png">
+      <div class="content">
+        <div class="title">${t.name}</div>
+        <div class="note">⭐ ${t.note}/10</div>
+      </div>
+    `;
+
+    card.onclick=()=>openModal(t);
+
+    grid.appendChild(card);
+  });
 }
 
-function togglePlay() {
-  if (audio.paused) audio.play();
+function sortBy(type){
+  mode = type;
+  render();
+}
+
+function openModal(t){
+  document.getElementById("modal").style.display="flex";
+
+  document.getElementById("modalImg").src = t.name + ".png";
+  document.getElementById("modalTitle").textContent = t.name;
+  document.getElementById("modalDesc").textContent = t.desc;
+
+  document.getElementById("playerTitle").textContent = t.name;
+
+  audio.src = t.name + ".mp3";
+  audio.play();
+}
+
+function togglePlay(){
+  if(audio.paused) audio.play();
   else audio.pause();
 }
 
-audio.addEventListener("timeupdate", () => {
-  progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+const progress = document.getElementById("progress");
+const currentTime = document.getElementById("currentTime");
+const duration = document.getElementById("duration");
+
+audio.addEventListener("timeupdate", ()=>{
+  progress.value = (audio.currentTime/audio.duration)*100 || 0;
+
+  currentTime.textContent = format(audio.currentTime);
+  duration.textContent = format(audio.duration);
 });
 
-progress.addEventListener("input", () => {
-  audio.currentTime = (progress.value / 100) * audio.duration;
+progress.addEventListener("input", ()=>{
+  audio.currentTime = (progress.value/100)*audio.duration;
 });
 
-volume.addEventListener("input", () => {
-  audio.volume = volume.value;
-});
+function format(t){
+  if(isNaN(t)) return "0:00";
+  let m=Math.floor(t/60);
+  let s=Math.floor(t%60);
+  if(s<10) s="0"+s;
+  return m+":"+s;
+}
+
+// fermer modal
+document.getElementById("modal").onclick = (e)=>{
+  if(e.target.id==="modal"){
+    document.getElementById("modal").style.display="none";
+    audio.pause();
+  }
+};
+
+render();
+
 </script>
 
 </body>
