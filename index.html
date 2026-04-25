@@ -10,13 +10,16 @@
       background: #f2f4f8;
     }
 
+    .logo {
+      max-height: 80px; /* ajuste si besoin */
+    }
+
     .header {
       background: #0b1f3a;
-      color: white;
-      padding: 35px;
-      text-align: center;
-      font-size: 70px;
-      font-weight: bold;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .controls-bar {
@@ -207,7 +210,9 @@
 
 <body>
 
-<div class="header">TROLLPICKS</div>
+<div class="header">
+  <img src="trollpick.png" class="logo">
+</div>
 
 <div class="controls-bar">
   <button onclick="sortBy('note')">Par note</button>
