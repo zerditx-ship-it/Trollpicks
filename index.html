@@ -75,6 +75,17 @@
       font-weight: bold;
     }
 
+    .btn-img-ui {
+      height: 60px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn-img-ui:hover {
+      transform: scale(1.1);
+    }
+
     .note {
       margin-top: 5px;
       color: #555;
@@ -221,8 +232,13 @@
 </div>
 
 <div class="controls-bar">
-  <button onclick="sortBy('note')">Par note</button>
-  <button onclick="sortBy('index')">Original</button>
+
+  <img src="noteboutton.png" class="btn-img-ui" onclick="sortBy('note')">
+
+  <img src="numero.png" class="btn-img-ui" onclick="sortBy('index')">
+
+  <img src="aleatoire.png" class="btn-img-ui" onclick="randomPick()">
+
 </div>
 
 <div class="grid" id="grid"></div>
@@ -338,6 +354,34 @@ function sortBy(type){
   mode = type;
   render();
 }
+
+function randomPick(){
+
+  let minNote = prompt("Note minimale ? (0 à 10)");
+
+  if(minNote === null) return; // si annule
+
+  minNote = parseFloat(minNote);
+
+  if(isNaN(minNote)) {
+    alert("Entre un nombre valide");
+    return;
+  }
+
+  // filtre
+  const valid = trollpicks.filter(t => t.note >= minNote);
+
+  if(valid.length === 0){
+    alert("Aucun trollpick avec cette note");
+    return;
+  }
+
+  // choix aléatoire
+  const random = valid[Math.floor(Math.random() * valid.length)];
+
+  // ouverture
+  openModal(random);
+}  
 
 function openModal(t){
   document.getElementById("modal").style.display="flex";
