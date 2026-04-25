@@ -29,8 +29,12 @@
     }
 
     .controls-bar {
-      text-align: center;
-      margin: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      margin-bottom: 5px; /* ↓ réduit l'espace sous les boutons */
+      border-bottom: 1px solid #ddd;
     }
 
     button {
@@ -145,8 +149,24 @@
       overflow:hidden;
     }
 
+    .label {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
     .left {
       width:40%;
+    }
+
+    .left-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .right-controls {
+      display: flex;
+      align-items: center;
     }
 
     .left img {
@@ -234,11 +254,16 @@
 
 <div class="controls-bar">
 
-  <img src="noteboutton1.png" class="btn-img-ui" onclick="sortBy('note')">
+  <div class="left-controls">
+    <span class="label">Trier par :</span>
 
-  <img src="numero1.png" class="btn-img-ui" onclick="sortBy('index')">
+    <img src="noteboutton.png" class="btn-img-ui" onclick="sortBy('note')">
+    <img src="numero.png" class="btn-img-ui" onclick="sortBy('index')">
+  </div>
 
-  <img src="aleatoire1.png" class="btn-img-ui" onclick="randomPick()">
+  <div class="right-controls">
+    <img src="aleatoire.png" class="btn-img-ui" onclick="randomPick()">
+  </div>
 
 </div>
 
