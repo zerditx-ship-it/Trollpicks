@@ -11,17 +11,19 @@
     }
 
     .logo {
-      max-height: 300px; /* ajuste si besoin */
+      height: 300px; /* mets ce que tu veux ici */
+      display: block; /* enlève l'espace inline */
     }
 
     .header {
       background: #0b1f3a;
-      padding: 0px 0;
+      padding: 0; /* enlève toute marge interne */
       display: flex;
       justify-content: center;
       align-items: center;
+      height: auto; /* important */
     }
-
+  
     .header img {
       display: block;
     }
