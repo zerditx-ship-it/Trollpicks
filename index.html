@@ -76,7 +76,9 @@
     }
 
     .btn-img-ui {
-      height: 60px;
+      height: 70px;       /* hauteur identique pour tous */
+      width: auto;        /* garde les proportions */
+      object-fit: contain; /* évite les déformations */
       margin: 0 10px;
       cursor: pointer;
       transition: transform 0.2s;
@@ -85,7 +87,6 @@
     .btn-img-ui:hover {
       transform: scale(1.1);
     }
-
     .note {
       margin-top: 5px;
       color: #555;
