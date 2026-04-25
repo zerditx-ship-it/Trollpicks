@@ -71,6 +71,7 @@
       color: #555;
     }
 
+    /* NUMERO */
     .index {
       position: absolute;
       top: 10px;
@@ -80,6 +81,25 @@
       padding: 10px;
       font-size: 18px;
       border-radius: 8px;
+    }
+
+    /* BADGE MUSIQUE */
+    .music-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      background: #ff2f92; /* rose/magenta */
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .music-badge img {
+      width: 22px;
+      height: 22px;
     }
 
     /* MODAL */
@@ -239,10 +259,10 @@
 let mode = "index";
 
 const trollpicks = [
-  { name:"Ajaxvlad", note:8, desc:"Description Ajax" },
-  { name:"Mozzarellia", note:9, desc:"Description Mozza" },
-  { name:"Yasugrosyonegro", note:7, desc:"Description Yasu" },
-  { name:"Jeanluxmelanchon", note:8, desc:"Description Jeanlux" }
+  { name:"Ajaxvlad", note:8, desc:"Description Ajax", music:true },
+  { name:"Mozzarellia", note:9, desc:"Description Mozza", music:true },
+  { name:"Yasugrosyonegro", note:7, desc:"Description Yasu", music:true },
+  { name:"Jeanluxmelanchon", note:8, desc:"Description Jeanlux", music:true }
 ];
 
 const grid = document.getElementById("grid");
@@ -276,7 +296,15 @@ function render(){
 
     card.innerHTML=`
       <div class="index">#${indexOriginal}</div>
+
+      ${t.music ? `
+        <div class="music-badge">
+          <img src="note.png">
+        </div>
+      ` : ""}
+
       <img src="${t.name}.png">
+
       <div class="content">
         <div class="title">${t.name}</div>
         <div class="note">⭐ ${t.note}/10</div>
