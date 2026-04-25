@@ -307,7 +307,7 @@ function render(){
         </div>
       ` : ""}
 
-      <img src="${t.name}.png">
+      <img src="${t.name}.png" onerror="this.src='cooking.png'">
 
       <div class="content">
         <div class="title">${t.name}</div>
@@ -330,6 +330,9 @@ function openModal(t){
   document.getElementById("modal").style.display="flex";
 
   document.getElementById("modalImg").src = t.name + ".png";
+document.getElementById("modalImg").onerror = function(){
+  this.src = "cooking.png";
+};
   document.getElementById("modalTitle").textContent = t.name;
   document.getElementById("modalDesc").textContent = t.desc;
   document.getElementById("playerTitle").textContent = t.name;
