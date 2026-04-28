@@ -11,18 +11,19 @@
     }
 
     .logo {
-      height: 300px; /* mets ce que tu veux ici */
-      display: block; /* enlève l'espace inline */
-    }
+  height: 80px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
     .header {
-      background: #0b1f3a;
-      padding: 10px; /* enlève toute marge interne */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: auto; /* important */
-    }
+  background: #0b1f3a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
   
     .header img {
       display: block;
@@ -79,9 +80,7 @@
     }
 
     .btn-img-ui {
-  height: 70px;
-  width: auto;
-  object-fit: contain;
+  height: 40px;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -153,6 +152,7 @@
     }
 
     .label {
+      color: white;
   font-weight: bold;
   font-size: 18px;
 }
@@ -164,23 +164,24 @@
     .left-controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+}
+
+.sort-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
 }
 
     .random-btn {
   height: 90px;
 }
 
-    .sort-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-    
-    .right-controls {
-      display: flex;
-      align-items: center;
-    }
 
     .left img {
       width:100%;
@@ -262,10 +263,6 @@
 <body>
 
 <div class="header">
-  <img src="trollpick2.png" class="logo">
-</div>
-
-<div class="controls-bar">
 
   <div class="left-controls">
     <span class="label">Trier par :</span>
@@ -276,8 +273,10 @@
     </div>
   </div>
 
+  <img src="trollpick.png" class="logo">
+
   <div class="right-controls">
-    <img src="aleatoire1.png" class="btn-img-ui random-btn" onclick="randomPick()">
+    <img src="aleatoire.png" class="btn-img-ui random-btn" onclick="randomPick()">
   </div>
 
 </div>
