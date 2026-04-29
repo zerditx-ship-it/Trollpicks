@@ -482,21 +482,26 @@ function randomPick(){
 function openModal(t){
   document.getElementById("modal").style.display="flex";
 
-  document.getElementById("modalImg").src = t.name + ".png";
-document.getElementById("modalImg").onerror = function(){
-  this.src = "cooking.png";
+  // IMAGE
+  const img = document.getElementById("modalImg");
+  img.src = t.name + ".png";
+  img.onerror = function(){
+    this.src = "cooking.png";
+  };
 
- 
-  document.getElementById("modalNote").textContent = "⭐ " + t.note + "/10";
-
-  // index fiable
-  const index = trollpicks.findIndex(tp => tp.name === t.name) + 1;
-  document.getElementById("modalIndex").textContent = "#" + index;
-  
+  // TEXTE
   document.getElementById("modalTitle").textContent = t.name;
   document.getElementById("modalDesc").textContent = t.desc;
   document.getElementById("playerTitle").textContent = t.name;
 
+  // NOTE
+  document.getElementById("modalNote").textContent = "⭐ " + t.note + "/10";
+
+  // INDEX
+  const index = trollpicks.findIndex(tp => tp.name === t.name) + 1;
+  document.getElementById("modalIndex").textContent = "#" + index;
+
+  // AUDIO
   audio.src = t.name + ".mp3";
 }
 
