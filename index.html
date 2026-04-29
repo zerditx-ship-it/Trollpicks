@@ -338,9 +338,9 @@
   <!-- HEADER POPUP -->
   <div class="modal-header">
 
-  <div id="modalIndex">#1</div>
-<div id="modalTitle">TEST</div>
-<div id="modalNote">⭐ 10/10</div>
+  <div id="modalIndex"></div>
+<div id="modalTitle"></div>
+<div id="modalNote"></div>
 
 </div>
 
@@ -486,13 +486,12 @@ function openModal(t){
 document.getElementById("modalImg").onerror = function(){
   this.src = "cooking.png";
 
-  document.getElementById("modalTitle").textContent = t.name;
-document.getElementById("modalNote").textContent = "⭐ " + t.note + "/10";
+ 
+  document.getElementById("modalNote").textContent = "⭐ " + t.note + "/10";
 
-// ⚠️ IMPORTANT : index fiable
-const index = trollpicks.findIndex(tp => tp.name === t.name) + 1;
-document.getElementById("modalIndex").textContent = "#" + index;
-};
+  // index fiable
+  const index = trollpicks.findIndex(tp => tp.name === t.name) + 1;
+  document.getElementById("modalIndex").textContent = "#" + index;
   
   document.getElementById("modalTitle").textContent = t.name;
   document.getElementById("modalDesc").textContent = t.desc;
