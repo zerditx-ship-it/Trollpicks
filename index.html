@@ -110,6 +110,10 @@
   transition: transform 0.2s;
 }
 
+    .modal-header div {
+  color: white;
+}
+
 .btn-img-ui:hover {
   transform: scale(1.2);
 }
@@ -484,11 +488,12 @@ function openModal(t){
 document.getElementById("modalImg").onerror = function(){
   this.src = "cooking.png";
 
-  document.getElementById("modalTitle").innerText = t.name;
-document.getElementById("modalNote").innerText = "⭐ " + t.note + "/10";
+  document.getElementById("modalTitle").textContent = t.name;
+document.getElementById("modalNote").textContent = "⭐ " + t.note + "/10";
 
-const index = trollpicks.indexOf(t) + 1;
-document.getElementById("modalIndex").innerText = "#" + index;
+// ⚠️ IMPORTANT : index fiable
+const index = trollpicks.findIndex(tp => tp.name === t.name) + 1;
+document.getElementById("modalIndex").textContent = "#" + index;
 };
   
   document.getElementById("modalTitle").textContent = t.name;
