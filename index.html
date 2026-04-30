@@ -430,14 +430,37 @@
 let mode = "index";
 
 const trollpicks = [
-  { name:"Ajaxvlad", note:8, desc:"Description Ajax", music:true },
-  { name:"Mozzarellia", note:9, desc:"Description Mozza", music:false },
+  {
+    name:"Ajaxvlad",
+    note:7,
+    desc:"Description Ajax et V'laduMIMR",
+    music:true,
+  
+    builds: {
+      adc: ["poigne", "coeuracier", "...", "riftmaker"],
+      support: ["..."]
+    }
+  },
+  
+  {
+    name:"Mozzarellia",
+    note:7,
+    desc:"Description Mozzarellia",
+    music:true,
+  
+    builds: {
+      adc: ["poine", "coeuracier", "hydretita", "armuresanguine", "..."],
+      support: ["darkharvest", "onde", "shadow", "rabadon", "void"]
+    }
+  },
+  
   { name:"Yasugrosyonegro", note:7, desc:"Description Yasu", music:true },
   { name:"Jeanluxmelanchon", note:8, desc:"Description Jeanlux", music:true },
   { name:"Cho Kogbucha", note:6, desc:"Description Cho", music:true },
   { name:"Roure-AtZed & Cho'pinot", note:5, desc:"Description Roure-Atzed", music:true },
   { name:"Liliane et José", note:9, desc:"Description liliane", music:false },
   { name:"Pizzac Raviolee", note:9, desc:"Description pizzac", music:false },
+  
   {
     name:"Throushcrank",
     note:10,
@@ -445,7 +468,7 @@ const trollpicks = [
     music:false,
   
     builds: {
-      adc: ["je sais pas", "je sais plus"],
+      adc: [],
       support: ["electrocute", "malfaisance"]
     }
   },
@@ -458,7 +481,7 @@ const trollpicks = [
     desc:"Description Milio Bomba",
     music:true,
   
-    build: ["Luden", "shadow"] // simple
+    build: ["luden", "shadow"] // simple
   }
 ];
 
