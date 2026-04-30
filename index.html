@@ -164,6 +164,32 @@
       filter: brightness(1.3);
     }
 
+    .build {
+  margin-top: 10px;
+    }
+    
+    .build-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .build-label {
+      font-weight: bold;
+      min-width: 120px;
+    }
+    
+    .build-items img {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+    }
+
+    .build-items img:hover {
+      transform: scale(1.2);
+    }
+
     /* MODAL */
     .modal {
       position: fixed;
@@ -368,6 +394,9 @@
     <div class="desc" id="modalDesc"></div>
   </div>
 
+   <!-- BUILD--> 
+   <div id="buildContainer"></div>
+
   <!-- PLAYER -->
   <div class="player">
     <div class="player-title" id="playerTitle"></div>
@@ -409,8 +438,28 @@ const trollpicks = [
   { name:"Roure-AtZed & Cho'pinot", note:5, desc:"Description Roure-Atzed", music:true },
   { name:"Liliane et José", note:9, desc:"Description liliane", music:false },
   { name:"Pizzac Raviolee", note:9, desc:"Description pizzac", music:false },
-  { name:"Throushcrank", note:10, desc:"Description throush", music:false },
-  { name:"Viagralistar", note:8, desc:"Description viagra", music:false }
+  {
+    name:"Throushcrank",
+    note:10,
+    desc:"Description Throushcrank",
+    music:false,
+  
+    builds: {
+      adc: ["je sais pas", "je sais plus"],
+      support: ["electrocute", "malfaisance"]
+    }
+  },
+  
+  { name:"Viagralistar", note:8, desc:"Description viagra", music:false },
+  
+  {
+    name:"Milio Bomba",
+    note:8,
+    desc:"Description Milio Bomba",
+    music:true,
+  
+    build: ["Luden", "shadow"] // simple
+  }
 ];
 
 const grid = document.getElementById("grid");
@@ -522,6 +571,56 @@ function openModal(t){
 
   // AUDIO
   audio.src = t.name + ".mp3";
+
+  const container = document.getElementById("buildContainer");
+container.innerHTML = "";
+
+// CAS 1 : build simple
+if(t.build){
+  const row = document.createElement("div");
+  row.className = "build-row";
+
+  row.innerHTML = `
+    <div class="build-label">Build :</div>
+    <div class="build-items">
+      ${t.build.map(item => `<img src="${item}.png">`).join("")}
+    </div>
+  `;
+
+  container.appendChild(row);
+}
+
+// CAS 2 : builds multiples
+if(t.builds){
+
+  if(t.builds.adc){
+    const row = document.createElement("div");
+    row.className = "build-row";
+
+    row.innerHTML = `
+      <div class="build-label">Build ADC :</div>
+      <div class="build-items">
+        ${t.builds.adc.map(item => `<img src="${item}.png">`).join("")}
+      </div>
+    `;
+
+    container.appendChild(row);
+  }
+
+  if(t.builds.support){
+    const row = document.createElement("div");
+    row.className = "build-row";
+
+    row.innerHTML = `
+      <div class="build-label">Build Support :</div>
+      <div class="build-items">
+        ${t.builds.support.map(item => `<img src="${item}.png">`).join("")}
+      </div>
+    `;
+
+    container.appendChild(row);
+  }
+}
 }
 
 function togglePlay(){
